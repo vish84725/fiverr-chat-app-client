@@ -46,13 +46,18 @@ export class DashboardComponent implements OnInit, AfterViewChecked {
   
 
   constructor(
-    private websocketService : WebsocketService,
+    public websocketService : WebsocketService,
     private authService: AuthService,
     private router: Router,
     private flashMessage: FlashMessagesService,
     private chat: ChatService
 
-  ) { }
+  ) { 
+    this.websocketService.onlineUsers$.subscribe(s=>{
+      console.log('online users',s);
+    });
+
+  }
 
 
 
@@ -164,6 +169,7 @@ export class DashboardComponent implements OnInit, AfterViewChecked {
 
 
   onLogoutClick() {
+    this.websocketService.logOutUser(this.user.username);
     this.authService.logout();
     this.flashMessage.show('You are logged out', {
       cssClass: 'alert-success',
